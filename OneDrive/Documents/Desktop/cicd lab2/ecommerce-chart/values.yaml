@@ -1,0 +1,79 @@
+mysql:
+  image: mysql:8.0
+  persistence:
+    enabled: true
+    size: 5Gi
+  rootPassword: root
+  database: ecommerce
+  user: ecommerceuser
+  password: ecom123
+  service:
+    port: 3306
+
+backend:
+  image:
+    repository: lathwikagangavarapu/ecommerce-backend1
+    tag: "v1"
+  replicaCount: 3
+  service:
+    type: NodePort
+    port: 9000
+    targetPort: 8080
+    nodePort: 30085
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+
+frontend:
+  image:
+    repository: lathwikagangavarapu/ecommerce-frontend1
+    tag: "v1"
+  replicaCount: 2
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 8080
+    nodePort: 30082
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ecommerce.local
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  paths:
+    - path: /
+      pathType: Prefix
+      backend:
+        serviceName: frontend
+        servicePort: 80
+    - path: /api
+      pathType: Prefix
+      backend:
+        serviceName: backend
+        servicePort: 8080
+
+autoscaling:
+  backend:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
+
+  frontend:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 60
