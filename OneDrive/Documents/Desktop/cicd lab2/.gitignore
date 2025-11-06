@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+target/
+*.jar
+*.war
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Docker
+.dockerignore
+
+# Kubernetes
+kubeconfig
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+tmp/
+temp/
+
+# Build artifacts
+dist/
+build/
+
+# Helm
+ecommerce-chart/charts/
+
+# Docker volumes (if using local)
+mysql_data/
